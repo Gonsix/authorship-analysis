@@ -3,6 +3,7 @@ import sys
 import nltk
 import pandas as pd
 import numpy as np
+import re
 
 RED = '\033[31m'
 GREEN = '\033[32m'
@@ -171,11 +172,14 @@ def search(query_string):
     print("query : ", query)
     for docId, document in enumerate(df['word_pos_list']):
         for idx, (word, pos), in enumerate(document):
-            # print(f'(word, pos): {word}, {pos}')
-            if word.casefold() == query[0].casefold(): # undistinguith Upper or Lower case
+
+            try: 
+                res = re.fullmatch(query[0].casefold() , word.casefold()) # If rejex matched, undistinguith Upper or Lower case
+            except:
+                res = None
+            if res:
                 # check the following words matche the sequence of words
                 foundFlg = True
-                # print("Following ", query[1:])
 
                 if len(query)>1:
 
@@ -185,7 +189,13 @@ def search(query_string):
                             pos_following = document[idx+1+i][1] # follwoing pos in the document
                         except: # if cannot access the index
                             break
-                        if query_following.casefold() == word_following.casefold() or query_following == pos_following:
+
+                        try:
+                            res2 = (re.fullmatch(query_following.casefold(),word_following.casefold()) or query_following == pos_following) # If rejex matched, undistinguith Upper or Lower case
+                        except:
+                            res2 = None
+
+                        if res2:
                             continue
                         foundFlg = False
                     
