@@ -198,24 +198,15 @@ def search(query_string):
                         print("Q :  ", end="")
 
 
-                    # 前後6 文字　出力
-                    pid = idx - 6
-                    for _ in range(6):
-                        if pid < 0:
-                            print("    ", end="")
-                        elif pid >= 0:
-                            print(document[pid][0], end=" ")
-                        pid += 1
-
-                    print(GREEN + word + END, end=" ")
-
-                    sid = idx + 1
-                    for _ in range(6):
-                        if sid < len(document):
-                            print(document[sid][0], end=" ")
-                        else:
-                            print("    ", end="")
-                        sid += 1
+                    # # 前後6 文字　出力
+                    for j in range(idx-6, idx+7):
+                            if 0 <= j and  j < len(document):
+                                if idx <= j and j < idx + len(query):  # within queried words
+                                    print(GREEN + document[j][0] + END, end=" ")
+                                else:    
+                                    print(document[j][0], end=" ")
+                            else:
+                                print("    ", end="")
 
                     print()
     print()
